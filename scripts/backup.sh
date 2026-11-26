@@ -8,6 +8,7 @@
 #
 #   scripts/backup.sh              # -> backups/entente-<UTC timestamp>.db
 #   scripts/backup.sh ~/somewhere  # custom output directory
+#   KEEP=30 scripts/backup.sh      # also delete all but the newest 30
 #
 # Restore (stops games mid-phase; do it when nobody is playing):
 #   fly ssh sftp shell -a entente-diplomacy   ->  put <file> /data/restore.db
@@ -42,3 +43,10 @@ if ok != "ok":
 print("Integrity: ok |", ", ".join(f"{k}: {v}" for k, v in counts.items()))
 EOF
 echo "Saved $LOCAL ($(du -h "$LOCAL" | cut -f1))"
+
+# KEEP=N deletes all but the newest N backups in OUT_DIR (default: keep everything).
+if [ "${KEEP:-0}" -gt 0 ]; then
+  ls -1t "$OUT_DIR"/entente-*.db 2>/dev/null | tail -n +"$((KEEP + 1))" | while read -r old; do
+    rm -f "$old" && echo "Pruned $old"
+  done
+fi
