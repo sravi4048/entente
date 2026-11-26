@@ -108,6 +108,14 @@ Put HTTPS in front of it with Caddy or Cloudflare Tunnel, then set `COOKIE_SECUR
 
 Tables are created automatically on startup. For future schema changes, add Alembic.
 
+### Backups
+
+```bash
+scripts/backup.sh            # -> backups/entente-<UTC timestamp>.db (gitignored)
+```
+
+Takes a consistent snapshot with SQLite's online backup API on the Fly machine (safe while games are running), downloads it, removes the server-side temp file and runs an integrity check. Restore steps are in the script's header. Fly also keeps daily volume snapshots for 5 days.
+
 ## How order entry works
 
 1. Tap a unit. Its legal moves are highlighted, and an action bar shows **Move / Hold / Support / Convoy**.
