@@ -5,6 +5,7 @@ import type { BoardState } from "../types";
 const LAND = "#ece3cc";
 const WATER = "#a9cbdf";
 const BORDER = "#6f6552";
+const isTop = (kind?: string) => kind === "water_top" || kind === "land_top";
 
 export interface DrawnOrder {
   raw: string;
@@ -385,15 +386,17 @@ export default function MapView({ map, board, orders = [], highlights, selected,
         <rect x={-W} y={-H} width={W * 3} height={H * 3} fill={WATER} />
         {image && <image href={geo.image} x={0} y={0} width={W} height={H} preserveAspectRatio="none" />}
         <g transform={`translate(${OX} ${OY})`}>
-          {geo.decor.map((d, i) => (
-            <path
-              key={i}
-              d={d.d}
-              fill={d.kind === "impassable" ? "url(#impassable)" : image ? "none" : d.kind === "water" ? WATER : d.fill ?? "#d9d2c0"}
-              stroke={image || d.kind === "water" ? "none" : BORDER}
-              strokeWidth={1.2 * k}
-            />
-          ))}
+          {geo.decor.map((d, i) =>
+            isTop(d.kind) ? null : (
+              <path
+                key={i}
+                d={d.d}
+                fill={d.kind === "impassable" ? "url(#impassable)" : image ? "none" : d.kind === "water" ? WATER : d.fill ?? "#d9d2c0"}
+                stroke={image || d.kind === "water" ? "none" : BORDER}
+                strokeWidth={1.2 * k}
+              />
+            ),
+          )}
           {Object.entries(geo.provinces).map(([id, p]) => {
             const o = owner[id];
             const water = isWater(p.type);
@@ -402,6 +405,20 @@ export default function MapView({ map, board, orders = [], highlights, selected,
             const fill = water ? WATER : o ? mix(powerColor(o), LAND, 0.55) : LAND;
             return <path key={id} d={p.d} fill={fill} stroke={water ? "#7fa9c2" : BORDER} strokeWidth={(water ? 1.2 : 1.6) * k} strokeLinejoin="round" />;
           })}
+          {/* Lakes/canals inside land provinces and islands inside sea provinces sit on top. */}
+          {!image &&
+            geo.decor.map((d, i) =>
+              isTop(d.kind) ? (
+                <path
+                  key={`top-${i}`}
+                  d={d.d}
+                  fill={d.kind === "water_top" ? WATER : "#d9d2c0"}
+                  stroke={d.kind === "water_top" ? "none" : BORDER}
+                  strokeWidth={1.2 * k}
+                  pointerEvents="none"
+                />
+              ) : null,
+            )}
           {highlights &&
             [...highlights].map((id) => (geo.provinces[id] ? <path key={`hl-${id}`} d={geo.provinces[id].d} className="hl" strokeWidth={4 * k} /> : null))}
           {selected && geo.provinces[selected] && <path d={geo.provinces[selected].d} className="sel" strokeWidth={4 * k} />}

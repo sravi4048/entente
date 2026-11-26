@@ -38,6 +38,9 @@ VARIANTS = {
     "modern": {
         "map": "modern",
         "name": "Modern",
+        "land_rects": True,
+        # Gaps between sea polygons that the source SVG leaves unfilled (no rect behind them).
+        "islands": ["M147 370 L154 366 L156 370 L150 371 Z"],  # Mallorca, between GOL and WME
         "description": "Ten powers on a modern Europe and Middle East, 64 supply centers. Builds allowed in any owned center.",
         "colors": {
             "BRITAIN": "#33509f", "EGYPT": "#b8862b", "FRANCE": "#4b9be0", "GERMANY": "#5e544a", "ITALY": "#3f9a55",
@@ -52,7 +55,7 @@ def parse_translate(tf):
     return (float(m.group(1)), float(m.group(2))) if m else (0.0, 0.0)
 
 
-def shape_d(el):
+def shape_d(el, rects=False):
     tag = el.tag.split("}")[-1]
     if tag == "path" and el.get("d"):
         return " ".join(el.get("d").split())
@@ -60,6 +63,12 @@ def shape_d(el):
         nums = re.findall(r"[-\d.]+", el.get("points"))
         pts = [f"{nums[i]} {nums[i + 1]}" for i in range(0, len(nums) - 1, 2)]
         return "M" + " L".join(pts) + " Z"
+    if rects and tag == "rect" and el.get("width") and el.get("height"):
+        # Modern draws a land-colored rect behind the central Med; the gaps between sea
+        # polygons there (Sardinia, Sicily, ...) are meant to show it.
+        x, y = float(el.get("x", 0)), float(el.get("y", 0))
+        w, h = float(el.get("width")), float(el.get("height"))
+        return f"M{x:g} {y:g} L{x + w:g} {y:g} L{x + w:g} {y + h:g} L{x:g} {y + h:g} Z"
     return None
 
 
@@ -87,14 +96,18 @@ def build(slug, cfg):
     for path in ml:
         raw, cls = path.get("id"), path.get("class")
         if path.tag.endswith("}g"):
-            # A province drawn as several shapes; water pieces (canals, lakes) are drawn on top.
+            # A province drawn as several shapes. For a land province the class="water"
+            # pieces are canals/lakes drawn on top; for a sea province they ARE the sea and
+            # the unclassed pieces are islands inside it (e.g. Corsica in the Ligurian Sea).
             parts = [c for c in path if shape_d(c)]
-            d = " ".join(shape_d(c) for c in parts if c.get("class") != "water")
-            for c in parts:
-                if c.get("class") == "water":
-                    decor.append({"kind": "water_top", "d": shape_d(c)})
+            is_sea = bool(raw and raw.startswith("_")) and m.area_type(code(raw)) == "WATER"
+            body = [c for c in parts if (c.get("class") == "water") == is_sea]
+            extra = [c for c in parts if (c.get("class") == "water") != is_sea]
+            d = " ".join(shape_d(c) for c in body)
+            for c in extra:
+                decor.append({"kind": "land_top" if is_sea else "water_top", "d": shape_d(c)})
         else:
-            d = shape_d(path)
+            d = shape_d(path, rects=cfg.get("land_rects", False))
         if not d:
             continue
         if not raw or not raw.startswith("_"):
@@ -106,6 +119,9 @@ def build(slug, cfg):
             decor.append({"kind": "impassable", "d": d, "id": p})
             continue
         provinces[p] = {"name": names.get(p, p), "type": kind.lower(), "sc": p in m.scs, "d": d}
+
+    for d in cfg.get("islands", []):
+        decor.append({"kind": "land", "d": d})
 
     coasts = {}
     for prov in root.find(f"{J}PROVINCE_DATA").findall(f"{J}PROVINCE"):
