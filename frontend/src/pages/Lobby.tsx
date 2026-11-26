@@ -560,9 +560,12 @@ function CreateGame({ initial, variants, onClose, onError }: { initial: string; 
 export function Logo() {
   return (
     <svg viewBox="0 0 64 64" width="26" height="26" aria-hidden>
-      <path d="M32 6 L54 18 V35 C54 47 44 54 32 58 C20 54 10 47 10 35 V18 Z" fill="#c9a24a" />
-      <path d="M32 16 L45 23 V34 C45 41 39 46 32 49 C25 46 19 41 19 34 V23 Z" fill="#1b2230" />
-      <path d="M26 30 L32 26 L38 30 L32 40 Z" fill="#c9a24a" />
+      {/* papal mitre: gold body, navy cross, darker-gold band and lappets */}
+      <path d="M17 46 L14 26 C14 17 23 10 32 3 C41 10 50 17 50 26 L47 46 Z" fill="#c9a24a" />
+      <path d="M29 12 h6 v7 h7 v6 h-7 v11 h-6 v-11 h-7 v-6 h7 Z" fill="#1b2230" />
+      <path d="M15.8 37 H48.2 L47 46 H17 Z" fill="#b08a35" />
+      <rect x="15.6" y="37" width="32.8" height="2.2" fill="#1b2230" />
+      <path d="M20 46 h7 v14 l-3.5 -2.5 l-3.5 2.5 Z M37 46 h7 v14 l-3.5 -2.5 l-3.5 2.5 Z" fill="#b08a35" />
     </svg>
   );
 }
