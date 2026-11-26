@@ -128,6 +128,11 @@ export default function Lobby({ me, onLogout, pane }: { me: UserBrief; onLogout:
         <div className="right">
           <span className="muted">
             {me.display_name} <span className="small">@{me.username}</span>
+            {me.is_admin && (
+              <span className="tag admin" title="You can review and approve uploaded maps">
+                Admin
+              </span>
+            )}
           </span>
           <button className="btn small ghost" onClick={onLogout}>
             Sign out
