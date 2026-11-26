@@ -168,3 +168,12 @@ def test_signup_code(monkeypatch):
     assert c.post("/api/auth/register", json={"username": "dave", "password": "password123"}).status_code == 403
     assert c.post("/api/auth/register", json={"username": "dave", "password": "password123", "invite_code": "backstab"}).status_code == 200
     assert c.get("/api/config").json()["signup_code_required"] is True
+
+
+def test_multiple_signup_codes(monkeypatch):
+    monkeypatch.setattr(api, "SIGNUP_CODE", "pope-francis's-devil, jd-vance")
+    c = TestClient(app)
+    reg = lambda u, code: c.post("/api/auth/register", json={"username": u, "password": "password123", "invite_code": code}).status_code
+    assert reg("erin", "wrong") == 403
+    assert reg("erin", "JD-Vance") == 200
+    assert reg("frank", "pope-francis's-devil") == 200

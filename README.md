@@ -100,7 +100,7 @@ Put HTTPS in front of it with Caddy or Cloudflare Tunnel, then set `COOKIE_SECUR
 | `SESSION_DAYS` | `30` | Login lifetime |
 | `SCHEDULER_INTERVAL_SECONDS` | `15` | How often deadlines are checked |
 | `SOURCE_URL` | empty | Shown in the footer (see License) |
-| `SIGNUP_CODE` | empty | If set, new accounts must enter it (case-insensitive) |
+| `SIGNUP_CODE` | empty | If set, new accounts must enter it (case-insensitive). Comma-separate several codes to accept any of them |
 | `ADMIN_USERNAMES` | empty | Comma-separated admins who approve maps. Empty = the first account |
 | `ANTHROPIC_API_KEY` | empty | Turns on the AI rule interpreter at review time |
 | `ANTHROPIC_MODEL` | `claude-sonnet-5-5` | Model the interpreter uses |

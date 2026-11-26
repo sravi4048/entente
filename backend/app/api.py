@@ -47,7 +47,9 @@ def config():
 
 @router.post("/auth/register")
 def register(body: RegisterIn, response: Response, db: Session = Depends(get_db)):
-    if SIGNUP_CODE and (body.invite_code or "").strip().lower() != SIGNUP_CODE.lower():
+    # SIGNUP_CODE may list several comma-separated codes; any one works (case-insensitive).
+    codes = {c.strip().lower() for c in SIGNUP_CODE.split(",") if c.strip()}
+    if codes and (body.invite_code or "").strip().lower() not in codes:
         raise HTTPException(403, "That sign-up code isn't right — ask whoever invited you")
     if not USERNAME_RE.match(body.username):
         raise HTTPException(400, "Username must be 3–20 letters, numbers or underscores")
