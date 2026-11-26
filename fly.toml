@@ -2,7 +2,7 @@
 #   fly launch --no-deploy --copy-config
 #   fly volumes create entente_data --size 1
 #   fly deploy
-app = "entente-diplomacy"   # change to a unique name
+app = "pope-diplomacy"
 primary_region = "ord"
 
 [build]
