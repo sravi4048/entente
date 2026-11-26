@@ -12,7 +12,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     STATIC_DIR=/app/static \
     DATA_DIR=/data \
-    HOME=/home/entente \
     PORT=8000
 WORKDIR /app
 COPY backend/requirements.txt ./
@@ -24,6 +23,7 @@ VOLUME ["/data"]
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s CMD python -c "import urllib.request,os;urllib.request.urlopen(f'http://127.0.0.1:{os.environ.get(\"PORT\",\"8000\")}/healthz')"
 # Starts as root only to chown the mounted volume (Fly/Docker volumes mount root-owned),
-# then drops to the unprivileged user.
+# then drops to the unprivileged user. HOME is set here because Fly's init overrides
+# image ENV HOME; the engine caches convoy paths under $HOME/.cache.
 # One worker on purpose: websockets and the deadline scheduler live in-process.
-CMD ["sh", "-c", "chown -R entente:entente \"$DATA_DIR\" && exec setpriv --reuid=entente --regid=entente --init-groups uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'"]
+CMD ["sh", "-c", "chown -R entente:entente \"$DATA_DIR\" && exec env HOME=/home/entente setpriv --reuid=entente --regid=entente --init-groups uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'"]
