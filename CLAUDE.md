@@ -10,7 +10,7 @@ Owner: Shravan (admin account; approves uploaded maps).
   - `app/api.py` — auth, friends, games, orders, press. `app/variants_api.py` — map upload/review/AI.
   - `app/mapbuild.py` — uploaded map (mask PNG + spec) → engine `.map` text + render geometry + report.
   - `app/variants/` — `registry.py` (built-in + uploaded variants), `mapgeom.py` (SVG → mask), `ai_rules.py`.
-  - `app/maps/` — render JSON for built-in variants (classic, ancmed, modern, pure). Regenerate with `scripts/build_builtin_maps.py`.
+  - `app/maps/` — render JSON for built-in variants (classic, ancmed, modern). Regenerate with `scripts/build_builtin_maps.py`.
   - `app/examples/toy-islands/` — example upload (regenerate with `scripts/make_example_map.py`).
 - `frontend/` — React 19 + TS + Vite, no UI framework, hand-rolled CSS in `src/styles.css`.
   - `src/orders.ts` — `MapModel` (per-variant geometry helpers), power colors, order parsing.

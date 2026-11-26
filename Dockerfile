@@ -12,6 +12,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     STATIC_DIR=/app/static \
     DATA_DIR=/data \
+    HOME=/home/entente \
     PORT=8000
 WORKDIR /app
 COPY backend/requirements.txt ./

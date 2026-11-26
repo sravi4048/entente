@@ -11,7 +11,7 @@ A self-hosted, real-time Diplomacy site in the spirit of Backstabbr: a big click
 - **History** lets you step through every past phase and see each order on the map, with failed orders marked.
 - **Draws** happen when every surviving player votes for one. A solo win takes 18 centers.
 - Games work with 1–7 players. Any power nobody takes sits in civil disorder and always holds.
-- **Two panes: Classic and Variants.** Variants ships with Ancient Mediterranean (5 players), Modern (10) and Pure (7).
+- **Two panes: Classic and Variants.** Variants ships with Ancient Mediterranean (5 players) and Modern (10).
 - **Custom maps.** Anyone signed in can upload a map: an SVG, or a picture plus a province mask, along with a short spec file. The site works out adjacencies, unit positions and the engine map, checks everything, then shows a preview with every border drawn. You approve maps before they go live. See [MAP_SPEC.md](MAP_SPEC.md).
 - **AI rule interpreter (optional).** A map's plain-English special rules ("a canal lets fleets sail between X and Y") are turned into proposed adjacency changes at review time, for you to accept or reject. Nothing AI-driven happens during play.
 - **Loose sign-up gate.** Set `SIGNUP_CODE`, and new accounts must enter that code.

@@ -1,6 +1,6 @@
 """Build render geometry for the built-in variants from the engine's bundled SVGs.
 
-Writes backend/app/maps/<slug>.json for: classic, ancmed, modern, pure.
+Writes backend/app/maps/<slug>.json for: classic, ancmed, modern.
 
 Usage:  python scripts/build_builtin_maps.py
 """
@@ -42,15 +42,6 @@ VARIANTS = {
         "colors": {
             "BRITAIN": "#33509f", "EGYPT": "#b8862b", "FRANCE": "#4b9be0", "GERMANY": "#5e544a", "ITALY": "#3f9a55",
             "POLAND": "#d0607a", "RUSSIA": "#8b5dc4", "SPAIN": "#e07b39", "TURKEY": "#dfc235", "UKRAINE": "#2fa3a0",
-        },
-    },
-    "pure": {
-        "map": "pure",
-        "name": "Pure",
-        "description": "Seven capitals, every one adjacent to every other. All armies, no neutrals — pure negotiation.",
-        "colors": {
-            "AUSTRIA": "#c8453c", "ENGLAND": "#33509f", "FRANCE": "#4b9be0", "GERMANY": "#5e544a",
-            "ITALY": "#3f9a55", "RUSSIA": "#8b5dc4", "TURKEY": "#dfae35",
         },
     },
 }

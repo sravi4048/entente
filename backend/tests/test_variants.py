@@ -42,7 +42,7 @@ def files_png(spec_text=None):
 
 def test_builtin_variants_listed(users):
     v = users["carol"].get("/api/variants").json()
-    assert [b["slug"] for b in v["builtin"]] == ["classic", "ancmed", "modern", "pure"]
+    assert [b["slug"] for b in v["builtin"]] == ["classic", "ancmed", "modern"]
     anc = next(b for b in v["builtin"] if b["slug"] == "ancmed")
     assert anc["players"] == 5 and anc["victory"] == 18
     geo = users["carol"].get("/api/variants/modern/map").json()

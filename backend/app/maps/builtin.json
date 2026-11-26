@@ -13,10 +13,5 @@
     "map": "modern",
     "name": "Modern",
     "description": "Ten powers on a modern Europe and Middle East, 64 supply centers. Builds allowed in any owned center."
-  },
-  "pure": {
-    "map": "pure",
-    "name": "Pure",
-    "description": "Seven capitals, every one adjacent to every other. All armies, no neutrals \u2014 pure negotiation."
   }
 }
