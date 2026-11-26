@@ -1,0 +1,39 @@
+# Fly.io: SQLite on a persistent volume, one always-on machine.
+#   fly launch --no-deploy --copy-config
+#   fly volumes create entente_data --size 1
+#   fly deploy
+app = "entente-diplomacy"   # change to a unique name
+primary_region = "ord"
+
+[build]
+
+[env]
+  COOKIE_SECURE = "1"
+  DATA_DIR = "/data"
+  # Secrets (set with `fly secrets set ...`, not here):
+  #   SIGNUP_CODE        shared code friends need to create an account
+  #   ADMIN_USERNAMES    who can approve uploaded maps
+  #   ANTHROPIC_API_KEY  optional, enables the AI rule interpreter
+
+[mounts]
+  source = "entente_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  # Keep it running: phase deadlines are processed by an in-process scheduler.
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    path = "/healthz"
+    timeout = "5s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

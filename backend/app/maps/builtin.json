@@ -1,0 +1,22 @@
+{
+  "classic": {
+    "map": "standard",
+    "name": "Classic",
+    "description": "The original 1901 Europe. Seven Great Powers, 34 supply centers, 18 to win."
+  },
+  "ancmed": {
+    "map": "ancmed",
+    "name": "Ancient Mediterranean",
+    "description": "Five empires around the Mediterranean, 34 supply centers. Tight, aggressive, great for smaller groups."
+  },
+  "modern": {
+    "map": "modern",
+    "name": "Modern",
+    "description": "Ten powers on a modern Europe and Middle East, 64 supply centers. Builds allowed in any owned center."
+  },
+  "pure": {
+    "map": "pure",
+    "name": "Pure",
+    "description": "Seven capitals, every one adjacent to every other. All armies, no neutrals \u2014 pure negotiation."
+  }
+}

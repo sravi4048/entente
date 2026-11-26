@@ -1,0 +1,33 @@
+# Local or single-VPS deployment with Postgres.
+#   docker compose up -d --build   →  http://localhost:8000
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://entente:entente@db:5432/entente
+      COOKIE_SECURE: "0"   # set to 1 once you put HTTPS in front (Caddy, Cloudflare, etc.)
+      SOURCE_URL: ""       # link to your public repo (AGPL — see README)
+      SIGNUP_CODE: ""      # set to require a code at sign-up
+      ADMIN_USERNAMES: ""  # who approves uploaded maps (empty = first account)
+      ANTHROPIC_API_KEY: "" # optional: AI rule interpreter
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: entente
+      POSTGRES_PASSWORD: entente
+      POSTGRES_DB: entente
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U entente"]
+      interval: 5s
+      retries: 10
+    restart: unless-stopped
+volumes:
+  pgdata:

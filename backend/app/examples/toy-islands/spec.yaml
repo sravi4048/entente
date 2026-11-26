@@ -1,0 +1,54 @@
+# Toy Islands — a tiny example map for Entente.
+# Upload this file with map.png + mask.png (or with map.svg alone).
+name: Toy Islands
+description: Three kingdoms, three neutral centers and a mountain range nobody can cross.
+start_year: 1901
+victory: 4                 # supply centers needed to win (default: more than half)
+build_anywhere: false      # true = build in any owned center, not just home centers
+color_tolerance: 10        # how far a mask pixel may drift from the listed color (0-40)
+
+powers:
+  - name: SCARLET
+    adjective: Scarlet
+    color: "#c8453c"
+    homes: [AAA]
+    units: ["F AAA"]
+  - name: AZURE
+    adjective: Azure
+    color: "#33509f"
+    homes: [BBB]
+    units: ["A BBB"]
+  - name: VERDANT
+    adjective: Verdant
+    color: "#3f9a55"
+    homes: [CCC]
+    units: ["F CCC"]
+
+provinces:
+  # code: exactly 3 letters. color: the province's flat color in mask.png (ignored for SVG uploads).
+  - {code: WES, name: West Sea,     type: sea,  color: "#1f4e9a"}
+  - {code: NOR, name: Northern Sea, type: sea,  color: "#2a6fd6"}
+  - {code: SOU, name: Southern Bay, type: sea,  color: "#34a0e0"}
+  - {code: AAA, name: Avalon,       type: land, color: "#c0392b", sc: true}
+  - {code: BBB, name: Bastion,      type: land, color: "#8e44ad", sc: true}
+  - {code: CCC, name: Corsa,        type: land, color: "#27ae60", sc: true}
+  - {code: EEE, name: Eastmarch,    type: land, color: "#16a085", sc: true}
+  - {code: FFF, name: Fenwick,      type: land, color: "#f1c40f", sc: true}
+  - {code: MTN, name: High Peaks,   type: land, color: "#7f8c8d", impassable: true}
+  - code: DDD
+    name: Dunmore
+    type: land
+    color: "#d35400"
+    sc: true
+    coasts:                # split coasts: fleets must say which side they're on
+      - {name: WC, seas: [WES]}
+      - {name: SC, seas: [SOU]}
+
+# Adjacencies are worked out from the mask. Use these lists to fix exceptions.
+adjacency:
+  add: []                  # e.g. ["AAA", "CCC", "fleet"]  (types: both | army | fleet)
+  remove: []               # e.g. ["AAA", "BBB"]
+
+rules: |
+  Optional plain-text rules. The reviewer can have an AI turn them into
+  adjacency changes, e.g. "A canal lets fleets sail between Avalon and Corsa."

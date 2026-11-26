@@ -1,0 +1,13 @@
+diplomacy==1.2.0
+fastapi==0.165.0
+uvicorn[standard]==0.54.0
+SQLAlchemy==2.1.9
+psycopg2-binary==2.9.13
+bcrypt==5.0.0
+python-multipart==0.0.34
+PyYAML==6.0.4
+numpy==2.5.5
+opencv-python-headless==5.1.0.95
+pillow==13.0.0
+svgelements==1.9.6
+anthropic==2.14.0
